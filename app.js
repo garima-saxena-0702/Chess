@@ -1,40 +1,25 @@
-var canvas = document.getElementById("chessBoard");
-var ctx = canvas.getContext("2d");
-var lineHeight = canvas.width;
-
-/**
- * @param x x coordinate
- * @param y y coordinate
- * @param direction 0 for Horizontal else 1 for vertical
- */
-function drawLine(x, y, direction) {
-  ctx.moveTo(x, y);
-  ctx.lineTo(x + lineHeight * !direction, y + lineHeight * direction);
-  ctx.stroke();
+function getBox(m, n) {
+    return document.getElementsByClassName('chessBoard')[0].children[n-1].children[m-1];
 }
 
-function fillChessSqaure() {
-  let color = true;
-  for (let i = 0; i < lineHeight; i += lineHeight / 8) {
-    color = !color;
-    for (let j = 0; j < lineHeight; j += lineHeight / 8) {
-      ctx.fillStyle = color ? "white" : "black";
-      color = !color;
-      ctx.fillRect(i, j, lineHeight / 8, lineHeight / 8);
+function initialChessBoard () {
+    for(let i = 1; i <= 8; i++){
+        for(let j = 1; j <= 8; j++) {
+            getBox(i, j).onclick = function(){
+                console.log(this);
+            }
+        }
     }
-  }
+    renderChessPieces()
 }
 
-function drawBoardBorder(){
-    drawLine(0, 0, 0);
-    drawLine(0, 0, 1);
-    drawLine(lineHeight, 0, 1);
-    drawLine(0, lineHeight, 0);
+function renderChessPieces(){
+    [...blackPieces, ...whitePieces].forEach(piece=>{
+        let img = document.createElement('img');
+        img.src = piece.img;
+        getBox(piece.x, piece.y).appendChild(img);
+    })
 }
 
-function drawChessBoard(){
-    fillChessSqaure();
-    drawBoardBorder();
-}
 
-drawChessBoard()
+initialChessBoard();

@@ -1,0 +1,26 @@
+.chessBoard {
+    width: 640px;
+    height: 640px;
+    border: 1px solid black;
+}
+
+.chessBoard>div {
+    display: flex;
+    height: 12.5%;
+    box-sizing: border-box;
+}
+
+.chessBoard>div>div {
+    display: flex;
+    box-sizing: border-box;
+    width: 12.5%;
+    justify-content: space-around;
+}
+
+.chessBoard>div:nth-child(2n)>div:nth-child(2n){
+    background: darkgray;
+}
+
+.chessBoard>div:nth-child(2n+1)>div:nth-child(2n+1){
+    background: darkgray;
+}
