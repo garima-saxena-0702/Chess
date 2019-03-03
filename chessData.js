@@ -10,18 +10,16 @@ class ChessPiece {
   }
 }
 
-
-function createPawns() {
-    for(var i=1;i<9;i++){
-        blackPieces.push(new ChessPiece('pawn', true, [i, 7]))
-        whitePieces.push(new ChessPiece('pawn',false, [i, 2]))
-    }
-}
-
-
+var pieces = ['rook', 'horse', 'bishop', 'king', 'queen', 'bishop', 'horse', 'rook'];
 
 function createChessPieces() {
-    createPawns();
+        pieces.forEach((piece,i) => {
+            let j=i+1;
+            blackPieces.push(new ChessPiece(piece, true, [j, 1]));
+            whitePieces.push(new ChessPiece(piece, false, [9-j, 8]));
+            blackPieces.push(new ChessPiece('pawn', true, [j, 2]))
+            whitePieces.push(new ChessPiece('pawn',false, [j, 7]))
+        })
 }
 
 createChessPieces();
