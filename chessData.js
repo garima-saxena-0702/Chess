@@ -28,7 +28,7 @@ function createChessPieces() {
         })
     }
     
-whitePieces.push(new ChessPiece('queen',false, [5,4], "W-q-"+5));
+whitePieces.push(new ChessPiece('horse',false, [6,4], "W-h-"+5));
 
 var allowedMoves = {
     rook: function(piece){
@@ -61,8 +61,21 @@ var allowedMoves = {
         }
         return allowedRook;
     },
+    // 6,4 ==> 5,2  7,2  5,6  7,7   4,3  8,3   4,5  8,5
     horse: function(piece) {
-        
+        x=piece.x;
+        y=piece.y;
+        let allowedHorse = [];
+        for(let i = -2; i <= 2; i++) {
+            j = (i%2 == 0)?1:2;
+            if(i != 0){
+                if(!piecesPositions.includes([x+i, y-j].toString()))
+                    allowedHorse.push([x+i, y-j].toString())
+                if(!piecesPositions.includes([x+i, y+j].toString()))
+                    allowedHorse.push([x+i, y+j].toString());
+            }
+        }
+        return allowedHorse;
     },
     bishop: function(piece) {
         let allowedBishop = [];
