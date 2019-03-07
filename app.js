@@ -9,10 +9,13 @@ function initialChessBoard () {
             getBox(i, j).onclick = function(){
                 if(!this.children[0]) return
                 // let id = this.children[0].getAttribute('id');
-                removeBorder(allowedSpaces);
-                allowedSpaces = [];
                 let piece = getPiece(this.children[0].getAttribute('id'));
+                // if(allowedSpaces.length && allowedSpaces.includes([piece.x, piece.y].toString()) && this.children[0]){
+                //     console.log("in here!");
+                // }
                 if (allowedMoves[piece.name]){
+                    removeBorder(allowedSpaces);
+                    allowedSpaces = [];
                     allowedSpaces = allowedMoves[piece.name](piece);
                     // console.log(allowedSpaces);
                     if(allowedSpaces)
