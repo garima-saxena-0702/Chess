@@ -24,28 +24,52 @@ var pieces = [
   "rook"
 ];
 
+
+var addPiece = function yogurtEaterz(pieceName, color, pos) {
+    this[color+'PiecesPositions'].push(pos.toString());
+    this[color+'Pieces'].push(new ChessPiece(pieceName, color=='black', pos, color[0]+"-"+pieceName[0]+'-'+pos[0]));
+}.bind(this)
+
 function createChessPieces() {
   pieces.forEach((piece, i) => {
     let j = i + 1;
-    blackPieces.push(
-      new ChessPiece(piece, true, [j, 1], "B-" + piece[0] + "-" + j)
-    );
-    blackPiecesPositions.push([j, 1].toString());
-    whitePieces.push(
-      new ChessPiece(piece, false, [9 - j, 8], "W-" + piece[0] + "-" + j)
-    );
-    whitePiecesPositions.push([9 - j, 8].toString());
-    blackPieces.push(new ChessPiece("pawn", true, [j, 2], "B-p-" + j));
-    blackPiecesPositions.push([j, 2].toString());
-    whitePieces.push(new ChessPiece("pawn", false, [j, 7], "W-p-" + j));
-    whitePiecesPositions.push([j, 7].toString());
-});
+    addPiece(piece, "black", [j, 1])
+    addPiece(piece, "white", [9-j, 8])
+    addPiece("pawn", "black", [j, 2])
+    addPiece("pawn", "white", [j, 7])
+  });
 }
 
-whitePieces.push(new ChessPiece("rook", false, [6, 4], "W-r-" + 5));
-whitePiecesPositions.push([6, 4].toString());
-blackPieces.push(new ChessPiece("rook", true, [5, 4], "B-r-" + 5));
-blackPiecesPositions.push([5, 4].toString());
+addPiece("pawn","black", [6,4]);
+addPiece("pawn","white", [6,5]);
+addPiece("pawn","white", [5,5]);
+addPiece("pawn","white", [7,5]);
+
+var checkCollision = (key, piece, allowedSpots) => { 
+  if ([...whitePiecesPositions, ...blackPiecesPositions].includes(key)) {
+    let index = [...whitePiecesPositions, ...blackPiecesPositions].indexOf(key);
+    let target = [...whitePieces, ...blackPieces][index];
+    if (target.isBlack === piece.isBlack) {
+      return 0;
+    } else {
+      allowedSpots.push(key);
+      return 1;
+    }
+  }
+  allowedSpots.push(key);
+  return 2;
+};
+
+let processCollision = function (x, piece, allowedSpots){
+    let collisionCode = checkCollision(
+        x.toString(),
+        piece,
+        allowedSpots
+      );
+      if (collisionCode < 2) {
+        return true
+      }        
+}
 
 var allowedMoves = {
   rook: function(piece) {
@@ -53,51 +77,30 @@ var allowedMoves = {
     y = piece.y;
     let allowedRook = [];
     for (let i = x - 1; i >= 1; i--) {
-      if (piece.id[0] == "W") {
-        if (whitePiecesPositions.includes([i, y].toString())) break;
-      } else {
-        if (blackPiecesPositions.includes([i, y].toString())) break;
-      }
-      allowedRook.push([i, y].toString());
+      if(processCollision([i,y], piece, allowedRook)) break;
     }
     for (let i = x + 1; i <= 8; i++) {
-      if (piece.id[0] == "W") {
-        if (whitePiecesPositions.includes([i, y].toString())) break;
-      } else {
-        if (blackPiecesPositions.includes([i, y].toString())) break;
-      }
-      allowedRook.push([i, y].toString());
+        if(processCollision([i,y], piece, allowedRook)) break;
     }
     for (let i = y - 1; i >= 1; i--) {
-      if (piece.id[0] == "W") {
-        if (whitePiecesPositions.includes([x, i].toString())) break;
-      } else {
-        if (blackPiecesPositions.includes([x, i].toString())) break;
-      }
-      allowedRook.push([x, i].toLocaleString());
+        if(processCollision([x,i], piece, allowedRook)) break;
     }
     for (let i = y + 1; i <= 8; i++) {
-      if (piece.id[0] == "W") {
-        if (whitePiecesPositions.includes([x, i].toString())) break;
-      } else {
-        if (blackPiecesPositions.includes([x, i].toString())) break;
-      }
-      allowedRook.push([x, i].toString());
+        if(processCollision([x,i], piece, allowedRook)) break;
     }
     return allowedRook;
   },
-  // 6,4 ==> 5,2  7,2  5,6  7,7   4,3  8,3   4,5  8,5
   horse: function(piece) {
     x = piece.x;
     y = piece.y;
     let allowedHorse = [];
+    let piecesPositions = blackPiecesPositions;
+    if (piece.id[0] == "W") piecesPositions = whitePiecesPositions;
     for (let i = -2; i <= 2; i++) {
       j = i % 2 == 0 ? 1 : 2;
       if (i != 0) {
-        if (!piecesPositions.includes([x + i, y - j].toString()))
-          allowedHorse.push([x + i, y - j].toString());
-        if (!piecesPositions.includes([x + i, y + j].toString()))
-          allowedHorse.push([x + i, y + j].toString());
+        if(processCollision([x+i,y-j], piece, allowedHorse));
+        if(processCollision([x+i,y+j], piece, allowedHorse));
       }
     }
     return allowedHorse;
@@ -107,24 +110,16 @@ var allowedMoves = {
     x = piece.x;
     y = piece.y;
     for (let i = x - 1, j = y - 1; i > 0 && j > 0; i--, j--) {
-      if (!piecesPositions.includes([i, j].toString()))
-        allowedBishop.push([i, j].toString());
-      else break;
+        if(processCollision([i,j], piece, allowedBishop)) break;
     }
     for (let i = x + 1, j = y + 1; i < 9 && j < 9; i++, j++) {
-      if (!piecesPositions.includes([i, j].toString()))
-        allowedBishop.push([i, j].toString());
-      else break;
+        if(processCollision([i,j], piece, allowedBishop)) break;
     }
-    for (let i = x + 1, j = y - 1; i < 8 && j > 0; i = i + 1, j--) {
-      if (!piecesPositions.includes([i, j].toString()))
-        allowedBishop.push([i, j].toString());
-      else break;
+    for (let i = x + 1, j = y - 1; i < 9 && j > 0; i = i + 1, j--) {
+        if(processCollision([i,j], piece, allowedBishop)) break;
     }
-    for (let i = x - 1, j = y + 1; i > 0 && j < 8; i--, j++) {
-      if (!piecesPositions.includes([i, j].toString()))
-        allowedBishop.push([i, j].toString());
-      else break;
+    for (let i = x - 1, j = y + 1; i > 0 && j < 9; i--, j++) {
+        if(processCollision([i,j], piece, allowedBishop)) break;
     }
     return allowedBishop;
   },
@@ -134,34 +129,34 @@ var allowedMoves = {
     let allowedKing = [];
     for (let i = -1; i <= 1; i++) {
       for (let j = -1; j <= 1; j++) {
-        if (piece.id[0] == "W") {
-          if (whitePiecesPositions.includes([i, y].toString())) break;
-        } else {
-          if (blackPiecesPositions.includes([i, y].toString())) break;
-        }
-        if (
-          (x != x + j || y != y + i) &&
-          (x + j > 0 && x + j < 9 && y + i > 0 && y + i < 9)
-        )
-          allowedKing.push([x + j, y + i].toString());
+        if(processCollision([x+i, y+j], piece, allowedKing)) continue;
       }
     }
     return allowedKing;
   },
   queen: function(piece) {
-    // x=piece.x;
-    // y=piece.y;
-    let allowedQueen = [];
-    allowedQueen = allowedMoves["bishop"](piece);
-    allowedQueen = allowedMoves["rook"](piece).concat(allowedQueen);
-    return allowedQueen;
+      return [...this.bishop(piece),...this.rook(piece)];
   },
+  //x-1,y+1 x,y+1 x+1,y+1
+  //
   pawn: function(piece) {
+    x = piece.x;
+    y = piece.y;
+    i = piece.isBlack? 1 : -1;
     let allowedPawn = [];
-    if (piece.isBlack) allowedPawn.push([piece.x, piece.y + 1].toString());
-    else allowedPawn.push([piece.x, piece.y - 1].toString());
+    pawnCollision(x-1, y+i, piece, allowedPawn);
+    pawnCollision(x+1, y+i, piece, allowedPawn);
+    if(![...whitePiecesPositions,...blackPiecesPositions].includes([x, y+i].toString()))
+        allowedPawn.push([x, y+i].toString())
     return allowedPawn;
-  }
+}
 };
+
+function pawnCollision(x, y,piece, allowedPawn) {
+    let index = [...whitePiecesPositions, ...blackPiecesPositions].indexOf([x, y].toString());
+    let target = [...whitePieces, ...blackPieces][index];
+    if(target && target.isBlack != piece.isBlack)
+        allowedPawn.push([x, y].toString())
+}
 
 createChessPieces();

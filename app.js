@@ -7,6 +7,7 @@ function initialChessBoard () {
     for(let i = 1; i <= 8; i++){
         for(let j = 1; j <= 8; j++) {
             getBox(i, j).onclick = function(){
+                console.log(i,j)
                 if(!this.children[0]) return
                 // let id = this.children[0].getAttribute('id');
                 let piece = getPiece(this.children[0].getAttribute('id'));
