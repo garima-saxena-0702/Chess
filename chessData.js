@@ -30,6 +30,13 @@ var addPiece = function yogurtEaterz(pieceName, color, pos) {
     this[color+'Pieces'].push(new ChessPiece(pieceName, color=='black', pos, color[0]+"-"+pieceName[0]+'-'+pos[0]));
 }.bind(this)
 
+var changePieceLocation = function yogurtConsumerz(pieceName, color, originalPos, changedPos) {
+    let index = this[color+'PiecesPositions'].indexOf(originalPos.toString());
+    this[color+'PiecesPositions'][index] = changedPos.toString();
+    this[color+'Pieces'][index].x = changedPos[0];
+    this[color+'Pieces'][index].y = changedPos[1];
+}.bind(this)
+
 function createChessPieces() {
   pieces.forEach((piece, i) => {
     let j = i + 1;
@@ -39,11 +46,6 @@ function createChessPieces() {
     addPiece("pawn", "white", [j, 7])
   });
 }
-
-addPiece("pawn","black", [6,4]);
-addPiece("pawn","white", [6,5]);
-addPiece("pawn","white", [5,5]);
-addPiece("pawn","white", [7,5]);
 
 var checkCollision = (key, piece, allowedSpots) => { 
   if ([...whitePiecesPositions, ...blackPiecesPositions].includes(key)) {
@@ -61,6 +63,7 @@ var checkCollision = (key, piece, allowedSpots) => {
 };
 
 let processCollision = function (x, piece, allowedSpots){
+    if(x.some((a) =>  {return a>8 || a<1})) return false;
     let collisionCode = checkCollision(
         x.toString(),
         piece,

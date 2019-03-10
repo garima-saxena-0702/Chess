@@ -1,26 +1,38 @@
+chance = true;
+
 function getBox(m, n) {
     return document.getElementsByClassName('chessBoard')[0].children[n-1].children[m-1];
 }
 
 function initialChessBoard () {
     let allowedSpaces = [];
+    let currentlocation;
+    let piece;
     for(let i = 1; i <= 8; i++){
         for(let j = 1; j <= 8; j++) {
             getBox(i, j).onclick = function(){
-                console.log(i,j)
-                if(!this.children[0]) return
-                // let id = this.children[0].getAttribute('id');
-                let piece = getPiece(this.children[0].getAttribute('id'));
-                // if(allowedSpaces.length && allowedSpaces.includes([piece.x, piece.y].toString()) && this.children[0]){
-                //     console.log("in here!");
-                // }
-                if (allowedMoves[piece.name]){
+                if(allowedSpaces.length && allowedSpaces.includes([i, j].toString())){
+                    let movedLocation = getBox(i, j);
+                    let imageDiv = currentlocation.innerHTML;
+                    currentlocation.innerHTML = "";
+                    movedLocation.innerHTML = imageDiv;
+                    movedLocation.style.border = "0";
                     removeBorder(allowedSpaces);
-                    allowedSpaces = [];
-                    allowedSpaces = allowedMoves[piece.name](piece);
-                    // console.log(allowedSpaces);
-                    if(allowedSpaces)
-                    drawBorder(allowedSpaces);
+                    allowedSpaces.length = 0;
+                    changePieceLocation(piece.name, piece.isBlack? "black": "white", [piece.x, piece.y], [i, j])
+                    chance = !chance;
+                }
+                else if(this.children[0] && ((this.children[0].id[0] == 'b')? true: false) == chance) {
+                    currentlocation = this;
+                    piece = getPiece(this.children[0].getAttribute('id'));
+                    if (allowedMoves[piece.name]){
+                        removeBorder(allowedSpaces);    
+                        allowedSpaces.length = 0;
+                        allowedSpaces = allowedMoves[piece.name](piece);
+                        // console.log(allowedSpaces);
+                        if(allowedSpaces)
+                        drawBorder(allowedSpaces);
+                    }
                 }
             }
         }
