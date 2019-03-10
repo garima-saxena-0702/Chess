@@ -30,11 +30,17 @@ var addPiece = function yogurtEaterz(pieceName, color, pos) {
     this[color+'Pieces'].push(new ChessPiece(pieceName, color=='black', pos, color[0]+"-"+pieceName[0]+'-'+pos[0]));
 }.bind(this)
 
-var changePieceLocation = function yogurtConsumerz(pieceName, color, originalPos, changedPos) {
+var changePieceLocation = function yogurtConsumerz(color, originalPos, changedPos) {
     let index = this[color+'PiecesPositions'].indexOf(originalPos.toString());
     this[color+'PiecesPositions'][index] = changedPos.toString();
     this[color+'Pieces'][index].x = changedPos[0];
     this[color+'Pieces'][index].y = changedPos[1];
+}.bind(this)
+
+var removePiece = function coldCoffe(color, indexRemoved) {
+        this[color+'PiecesPositions'].splice(indexRemoved,1);
+        let removedPiece = this[color+'Pieces'].splice(indexRemoved,1);
+        console.log(removedPiece);
 }.bind(this)
 
 function createChessPieces() {

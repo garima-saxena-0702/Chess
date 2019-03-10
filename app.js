@@ -8,6 +8,7 @@ function initialChessBoard () {
     let allowedSpaces = [];
     let currentlocation;
     let piece;
+    let indexRemoved = -1;
     for(let i = 1; i <= 8; i++){
         for(let j = 1; j <= 8; j++) {
             getBox(i, j).onclick = function(){
@@ -15,11 +16,16 @@ function initialChessBoard () {
                     let movedLocation = getBox(i, j);
                     let imageDiv = currentlocation.innerHTML;
                     currentlocation.innerHTML = "";
+                    indexRemoved = -1;
+                    if(movedLocation.children[0]) {
+                        let imageid = movedLocation.children[0].id;
+                        indexRemoved = blackPieces.findIndex((x) => x.id == imageid)
+                        removePiece(piece.isBlack? "white": "black", indexRemoved);
+                    }
                     movedLocation.innerHTML = imageDiv;
-                    movedLocation.style.border = "0";
                     removeBorder(allowedSpaces);
                     allowedSpaces.length = 0;
-                    changePieceLocation(piece.name, piece.isBlack? "black": "white", [piece.x, piece.y], [i, j])
+                    changePieceLocation(piece.isBlack? "black": "white", [piece.x, piece.y], [i, j])
                     chance = !chance;
                 }
                 else if(this.children[0] && ((this.children[0].id[0] == 'b')? true: false) == chance) {
