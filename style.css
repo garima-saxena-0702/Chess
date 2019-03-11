@@ -2,6 +2,8 @@
     width: 640px;
     height: 640px;
     border: 1px solid black;
+    position: absolute;
+    overflow: auto;
 }
 
 .chessBoard>div {
@@ -23,4 +25,35 @@
 
 .chessBoard>div:nth-child(2n+1)>div:nth-child(2n+1){
     background: darkgray;
+}
+
+.removedPiece {
+    position: absolute;
+    left: 652px;;
+    height: 50vh;
+    width: 680px;
+    border: 1px solid black;
+}
+
+.removedPiece::after {
+    height: 1px;
+    width: 648px;
+    /* color: black; */
+    border-bottom: 1px solid black;
+    position: absolute;
+    content: '';
+    top: 159px;
+    left: 13px;
+}
+
+#removedPieceBlack {
+    width: 100%;
+    height: 50%;
+    margin: 2px;
+}
+
+#removedPieceWhite {
+    width: 100%;
+    height: 50%;
+    margin: 2px;
 }

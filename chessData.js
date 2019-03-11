@@ -39,8 +39,7 @@ var changePieceLocation = function yogurtConsumerz(color, originalPos, changedPo
 
 var removePiece = function coldCoffe(color, indexRemoved) {
         this[color+'PiecesPositions'].splice(indexRemoved,1);
-        let removedPiece = this[color+'Pieces'].splice(indexRemoved,1);
-        console.log(removedPiece);
+        this[color+'Pieces'].splice(indexRemoved,1);
 }.bind(this)
 
 function createChessPieces() {

@@ -19,8 +19,9 @@ function initialChessBoard () {
                     indexRemoved = -1;
                     if(movedLocation.children[0]) {
                         let imageid = movedLocation.children[0].id;
-                        indexRemoved = blackPieces.findIndex((x) => x.id == imageid)
-                        removePiece(piece.isBlack? "white": "black", indexRemoved);
+                        document.getElementById('removedPiece'+(piece.isBlack? "White": "Black")).appendChild(movedLocation.children[0])
+                        indexRemoved = (piece.isBlack? whitePieces: blackPieces).findIndex((x) => x.id == imageid)
+                        pieceRemoved = removePiece(piece.isBlack? "white": "black", indexRemoved);
                     }
                     movedLocation.innerHTML = imageDiv;
                     removeBorder(allowedSpaces);
