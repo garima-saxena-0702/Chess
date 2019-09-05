@@ -17,7 +17,19 @@ nsp.on('connection', function(socket) {
 
     socket.on('createRoom', function(data) {
         var room = Math.floor(Math.random()*10000);
+        socket.join("room-" + room);
         socket.emit('roomCreated', room);
+    }) 
+
+    socket.on('connectRoom', function(roomNo) {
+        socket.join("room-" + roomNo);
+        // socket.emit('roomCreated', room);
+    }) 
+
+    socket.on('message', function (roomNo) {
+        console.log(roomNo);
+        console.log('Heya');
+        io.sockets.in("room-" + roomNo).emit('receiveMsg', "You are in room no. " + roomNo);
     }) 
     
     //Whenever someone disconnects this piece of code executed

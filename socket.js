@@ -5,7 +5,21 @@ function createRoom() {
 }
 
 socket.on('roomCreated', function(data) {
-    //Send message to everyone
-    // io.sockets.emit('newmsg', data);
     console.log(data);
  })
+
+socket.on('receiveMsg', function(data) {
+    console.log(data);
+ })
+
+function connectRoom() {
+    var roomNo = document.getElementById('roomNo').value;
+    console.log(roomNo);
+    socket.emit('connectRoom', roomNo);
+}
+
+function sendMessage() {
+    var roomNo = document.getElementById('roomNo').value;
+    socket.emit('message', roomNo);
+}
+
