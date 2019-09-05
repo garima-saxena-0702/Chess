@@ -15,11 +15,11 @@ var nsp = io.of('/my-namespace');
 nsp.on('connection', function(socket) {
     console.log('A user connected');
 
-    socket.on('setUsername', function(data) {
-        console.log(data);
-        
+    socket.on('createRoom', function(data) {
+        var room = Math.floor(Math.random()*10000);
+        socket.emit('roomCreated', room);
     }) 
- 
+    
     //Whenever someone disconnects this piece of code executed
     socket.on('disconnect', function () {
        console.log('A user disconnected');
