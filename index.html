@@ -7,6 +7,10 @@
     <title>Document</title>
     <link rel="stylesheet" href="style.css" />
   </head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <script>
+    // var socket = io();
+ </script>
   <body>
     <div style="position: relative;">
       <div class="chessBoard">
@@ -92,6 +96,7 @@
         </div>
       </div>
       <div class="removedPiece">
+        <div><button onclick="createRoom()"> Create room</button> </div>
         <div id='removedPieceBlack'></div>
         <div id='removedPieceWhite'></div>
       </div>
@@ -99,4 +104,5 @@
   </body>
   <script src="chessData.js"></script>
   <script src="app.js"></script>
+  <script src="socket.js"></script>
 </html>
