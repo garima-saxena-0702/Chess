@@ -1,4 +1,4 @@
-chance = true;
+chance = isPlayerWhite;
 
 function getBox(m, n) {
     return document.getElementsByClassName('chessBoard')[0].children[n-1].children[m-1];
@@ -30,6 +30,7 @@ function initialChessBoard () {
                     chance = !chance;
                 }
                 else if(this.children[0] && ((this.children[0].id[0] == 'b')? true: false) == chance) {
+                    // if (this.children[0].id[0] == 'b' && !isPlayerWhite)
                     currentlocation = this;
                     piece = getPiece(this.children[0].getAttribute('id'));
                     if (allowedMoves[piece.name]){

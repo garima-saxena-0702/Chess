@@ -12,7 +12,7 @@
     // var socket = io();
  </script>
   <body>
-    <div style="position: relative;">
+    <div style="position: relative; z-index: -1;">
       <div class="chessBoard">
         <div>
           <div></div>
@@ -95,17 +95,30 @@
           <div></div>
         </div>
       </div>
-      <div class="removedPiece">
-        <div><button onclick="createRoom()"> Create room</button> </div>
-        OR
-        <div>
-            <input type="text" id="roomNo">
-            <button onclick="connectRoom()">Connect to room</button>
-        </div>
-        <button onclick="sendMessage()">SendMsg</button>
-        <div id='removedPieceBlack'></div>
-        <div id='removedPieceWhite'></div>
+      <div id="connectedRoom">
+
       </div>
+      <div class="removedPiece">
+          <div id='removedPieceBlack'></div>
+          <div id='removedPieceWhite'></div>
+        </div>
+    </div>
+    <div class="option" id="option">
+        <div style="margin-bottom: 1em;">
+            <button onclick="createRoom()" class="buttonStyle"> Create room</button> 
+        </div>
+        <div style="display: flex;margin-left: 42%;">
+            <div class="lineBreak"></div>
+            <div>OR</div>
+            <div class="lineBreak"></div>
+        </div>
+        <div style="margin: 1em;">
+            <div style="margin: 1em">
+                <input class="inputStyle" type="text" id="roomNo">
+            </div>
+            <button onclick="connectRoom()" class="buttonStyle">Connect to room</button>
+        </div>
+        <!-- <button onclick="sendMessage()">SendMsg</button> -->
     </div>
   </body>
   <script src="chessData.js"></script>

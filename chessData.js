@@ -2,6 +2,7 @@ var blackPieces = [];
 var whitePieces = [];
 var blackPiecesPositions = [];
 var whitePiecesPositions = [];
+var isPlayerWhite;
 
 class ChessPiece {
   constructor(pieceName, isBlack, piecelocation, id) {
