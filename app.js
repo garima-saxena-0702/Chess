@@ -4,11 +4,16 @@ function getBox(m, n) {
     return document.getElementsByClassName('chessBoard')[0].children[n-1].children[m-1];
 }
 
+function renderNewBorders ( allowedSpaces, piece ){
+    removeBorder(allowedSpaces);    
+    allowedSpaces = allowedMoves[piece.name](piece);
+    drawBorder(allowedSpaces);
+    return allowedSpaces
+}
+
 function initialChessBoard () {
     let allowedSpaces = [];
-    let currentlocation;
     let piece;
-    let indexRemoved = -1;
     for(let i = 1; i <= 8; i++){
         for(let j = 1; j <= 8; j++) {
             getBox(i, j).onclick = function(){
@@ -16,22 +21,14 @@ function initialChessBoard () {
                     removeBorder(allowedSpaces);
                     allowedSpaces.length = 0;
                     socket.emit('changePieceLocation', { color: piece.isBlack ? "black" : "white", originalPos: [piece.x, piece.y], changedPos: [i, j], room: room });
-                    // changePieceLocation(piece.isBlack? "black": "white", [piece.x, piece.y], [i, j])
-                    // chance = !chance;
                 }
                 else if(this.children[0] && ((this.children[0].id[0] == 'w')? true: false) == isPlayerWhite) {
-                    // if (this.children[0].id[0] == 'b' && !isPlayerWhite)
                     if(!chance) return;
                     currentlocation = this;
                     piece = getPiece(this.children[0].getAttribute('id'));
                     if (allowedMoves[piece.name]){
-                        removeBorder(allowedSpaces);    
-                        allowedSpaces.length = 0;
-                        allowedSpaces = allowedMoves[piece.name](piece);
-                        // console.log(allowedSpaces);
-                        if(allowedSpaces)
-                        drawBorder(allowedSpaces);
-                    }
+                        allowedSpaces = renderNewBorders(allowedSpaces, piece);
+                    } 
                 }
             }
         }
