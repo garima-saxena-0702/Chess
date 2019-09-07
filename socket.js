@@ -5,11 +5,15 @@ function createRoom() {
     socket.emit('createRoom', 'randomValue');
 }
 
+function showBasicData(isPlayerWhite) {
+    document.getElementById('option').style.display = 'none';
+    document.getElementById('connectedRoom').innerHTML = '<p>Connected room: ' + room + '. You are ' + (isPlayerWhite ? 'White. ' : 'Black.')+' </p><p id="turns"></p>';
+    showPlayerDetail();
+}
+
 function showPlayerDetail() {
     let p = document.getElementById('turns')
     p.innerText = (chance? 'Your Turn.': 'Please wait.')
-    // document.getElementById('connectedRoom').appendChild(p)
-
 }
 
 socket.on('roomCreated', function (data) {
@@ -17,21 +21,16 @@ socket.on('roomCreated', function (data) {
         room = data.room;
         isPlayerWhite = data.isPlayerWhite;
         chance = !isPlayerWhite;
-        document.getElementById('option').style.display = 'none';
-        document.getElementById('connectedRoom').innerHTML = '<p>Connected room: ' + room + '. You are ' + (data.isPlayerWhite ? 'White. ' : 'Black.')+' </p><p id="turns"></p>';
-        showPlayerDetail();
+        showBasicData(isPlayerWhite);
     }
 })
 
 socket.on('roomConnected', function (data) {
     if (data) {
-        console.log("room");
         room = data.room;
         isPlayerWhite = data.isPlayerWhite
         chance = !isPlayerWhite;
-        document.getElementById('option').style.display = 'none';
-        document.getElementById('connectedRoom').innerHTML = '<p>Connected room: ' + room + '. You are ' + (data.isPlayerWhite ? 'White. ' : 'Black.') +'</p><p id="turns"></p>';
-        showPlayerDetail();
+        showBasicData(isPlayerWhite);
     }
 })
 
