@@ -13,24 +13,15 @@ function initialChessBoard () {
         for(let j = 1; j <= 8; j++) {
             getBox(i, j).onclick = function(){
                 if(allowedSpaces.length && allowedSpaces.includes([i, j].toString())){
-                    let movedLocation = getBox(i, j);
-                    let imageDiv = currentlocation.innerHTML;
-                    currentlocation.innerHTML = "";
-                    indexRemoved = -1;
-                    if(movedLocation.children[0]) {
-                        let imageid = movedLocation.children[0].id;
-                        document.getElementById('removedPiece'+(piece.isBlack? "White": "Black")).appendChild(movedLocation.children[0])
-                        indexRemoved = (piece.isBlack? whitePieces: blackPieces).findIndex((x) => x.id == imageid)
-                        pieceRemoved = removePiece(piece.isBlack? "white": "black", indexRemoved);
-                    }
-                    movedLocation.innerHTML = imageDiv;
                     removeBorder(allowedSpaces);
                     allowedSpaces.length = 0;
-                    changePieceLocation(piece.isBlack? "black": "white", [piece.x, piece.y], [i, j])
-                    chance = !chance;
+                    socket.emit('changePieceLocation', { color: piece.isBlack ? "black" : "white", originalPos: [piece.x, piece.y], changedPos: [i, j], room: room });
+                    // changePieceLocation(piece.isBlack? "black": "white", [piece.x, piece.y], [i, j])
+                    // chance = !chance;
                 }
-                else if(this.children[0] && ((this.children[0].id[0] == 'b')? true: false) == chance) {
+                else if(this.children[0] && ((this.children[0].id[0] == 'w')? true: false) == isPlayerWhite) {
                     // if (this.children[0].id[0] == 'b' && !isPlayerWhite)
+                    if(!chance) return;
                     currentlocation = this;
                     piece = getPiece(this.children[0].getAttribute('id'));
                     if (allowedMoves[piece.name]){

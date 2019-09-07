@@ -34,10 +34,14 @@ io.on('connection', function (socket) {
         });
     })
 
-    socket.on('message', function (roomNo) {
-        if (io.nsps['/'].adapter.rooms["room-" + roomNo].length == 2);
-        io.to("room-" + roomNo).emit('receiveMsg', "You are in room no. " + roomNo);
-    })
+    // socket.on('message', function (roomNo) {
+    //     if (io.nsps['/'].adapter.rooms["room-" + roomNo].length == 2);
+    //     io.to("room-" + roomNo).emit('receiveMsg', "You are in room no. " + roomNo);
+    // });
+
+    socket.on('changePieceLocation', function(data) {
+        io.to("room-"+data.room).emit('pieceChanged', data);
+    });
 
     //Whenever someone disconnects this piece of code executed
     socket.on('disconnect', function () {
