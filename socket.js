@@ -26,11 +26,14 @@ socket.on('roomCreated', function (data) {
 })
 
 socket.on('roomConnected', function (data) {
-    if (data) {
+    if (!data.error) {
+        document.getElementById('roomInavlid').innerText = "";
         room = data.room;
         isPlayerWhite = data.isPlayerWhite
         chance = !isPlayerWhite;
         showBasicData(isPlayerWhite);
+    }else{
+        document.getElementById('roomInavlid').innerText = data.error;
     }
 })
 

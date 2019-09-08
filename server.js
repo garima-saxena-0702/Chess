@@ -26,16 +26,19 @@ io.on('connection', function (socket) {
     })
     
     socket.on('connectRoom', function (room) {
-        socket.join("room-" + room);
-        socket.emit('roomConnected',
-        {
-            room,
-            isPlayerWhite: !(room % 2)
-        });
+        if(io.nsps['/'].adapter.rooms["room-"+room] && io.nsps['/'].adapter.rooms["room-"+room].length == 1) {
+            socket.join("room-" + room);
+            socket.emit('roomConnected',
+            {
+                room,
+                isPlayerWhite: !(room % 2)
+            });
+        } else {
+            socket.emit('roomConnected', {error : 'Room does not exist!'})
+        }
     })
 
     // socket.on('message', function (roomNo) {
-    //     if (io.nsps['/'].adapter.rooms["room-" + roomNo].length == 2);
     //     io.to("room-" + roomNo).emit('receiveMsg', "You are in room no. " + roomNo);
     // });
 
