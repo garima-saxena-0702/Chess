@@ -49,7 +49,7 @@ socket.on('pieceChanged', function ({piece, originalPos, changedPos}) {
     if (movedLocation.children[0]) {
         let imageid = movedLocation.children[0].id;
             if(movedLocation.children[0].id.slice(2,3) == 'k'){
-                document.getElementById('matchResult').innerHTML = '<p> <strong>' + (piece.isBlack ? "Black" : "White") + '</strong> </p> <div>Wins</div>';
+                document.getElementById('matchResult').innerHTML += '<p> <strong>' + (piece.isBlack ? "Black" : "White") + '</strong> </p> <div>Wins</div>';
                 document.getElementById('matchResult').style.display = 'block';
                 return;
             }
@@ -68,4 +68,6 @@ function connectRoom() {
     socket.emit('connectRoom', roomNo);
 }
 
-
+function playagain() {
+    document.getElementById('option').style.display = 'block';
+}
