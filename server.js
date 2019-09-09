@@ -16,7 +16,7 @@ io.on('connection', function (socket) {
 
     socket.on('createRoom', function (data) {
         var room = Math.floor(Math.random() * 10000);
-        socket.join("room-" + room);
+        socket.join("room-" + room)
         socket.emit('roomCreated',
             {
                 room,
@@ -33,6 +33,7 @@ io.on('connection', function (socket) {
                 room,
                 isPlayerWhite: !(room % 2)
             });
+            io.to("room-"+room).emit("startGm", "strt");
         } else {
             socket.emit('roomConnected', {error : 'Room does not exist!'})
         }

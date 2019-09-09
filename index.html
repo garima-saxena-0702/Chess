@@ -106,6 +106,7 @@
     <div class="option" id="option">
         <div style="margin-bottom: 1em;">
             <button onclick="createRoom()" class="buttonStyle"> Create room</button> 
+            <p id="roomId"></p>
         </div>
         <div style="display: flex;margin-left: 42%;">
             <div class="lineBreak"></div>
@@ -116,11 +117,12 @@
             <div style="margin: 1em">
                 <input class="inputStyle" type="text" id="roomNo">
             </div>
-            <button onclick="connectRoom()" class="buttonStyle">Connect to room</button>
+            <button onclick="connectRoom()" class="buttonStyle">Connect room</button>
             <p id="roomInavlid"></p>
         </div>
         <!-- <button onclick="sendMessage()">SendMsg</button> -->
     </div>
+    <div class="option" id="matchResult" style="display: none;"></div>
   </body>
   <script src="chessData.js"></script>
   <script src="app.js"></script>

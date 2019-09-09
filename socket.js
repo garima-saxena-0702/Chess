@@ -21,7 +21,7 @@ socket.on('roomCreated', function (data) {
         room = data.room;
         isPlayerWhite = data.isPlayerWhite;
         chance = !isPlayerWhite;
-        showBasicData(isPlayerWhite);
+        document.getElementById("roomId").innerHTML = 'Room Id: <strong>' + room + ' <strong>.'
     }
 })
 
@@ -31,13 +31,16 @@ socket.on('roomConnected', function (data) {
         room = data.room;
         isPlayerWhite = data.isPlayerWhite
         chance = !isPlayerWhite;
-        showBasicData(isPlayerWhite);
     }else{
         document.getElementById('roomInavlid').innerText = data.error;
     }
 })
 
-socket.on('pieceChanged', function ({color, originalPos, changedPos}) {
+socket.on("startGm", function(data) {
+    showBasicData(isPlayerWhite);
+})
+
+socket.on('pieceChanged', function ({piece, originalPos, changedPos}) {
     let movedLocation = getBox(changedPos[0], changedPos[1]);
     let currentlocation = getBox(originalPos[0], originalPos[1]);
     let imageDiv = currentlocation.innerHTML;
@@ -45,12 +48,17 @@ socket.on('pieceChanged', function ({color, originalPos, changedPos}) {
     indexRemoved = -1;
     if (movedLocation.children[0]) {
         let imageid = movedLocation.children[0].id;
+            if(movedLocation.children[0].id.slice(2,3) == 'k'){
+                document.getElementById('matchResult').innerHTML = '<p> <strong>' + (piece.isBlack ? "Black" : "White") + '</strong> </p> <div>Wins</div>';
+                document.getElementById('matchResult').style.display = 'block';
+                return;
+            }
         document.getElementById('removedPiece' + (piece.isBlack ? "White" : "Black")).appendChild(movedLocation.children[0])
         indexRemoved = (piece.isBlack ? whitePieces : blackPieces).findIndex((x) => x.id == imageid)
         pieceRemoved = removePiece(piece.isBlack ? "white" : "black", indexRemoved);
     }
     movedLocation.innerHTML = imageDiv;
-    changePieceLocation(color, originalPos, changedPos);
+    changePieceLocation(piece.isBlack ? "black" : "white", originalPos, changedPos);
     chance=!chance;
     showPlayerDetail();
 })

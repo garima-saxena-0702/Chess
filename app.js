@@ -20,7 +20,7 @@ function initialChessBoard () {
                 if(allowedSpaces.length && allowedSpaces.includes([i, j].toString())){
                     removeBorder(allowedSpaces);
                     allowedSpaces.length = 0;
-                    socket.emit('changePieceLocation', { color: piece.isBlack ? "black" : "white", originalPos: [piece.x, piece.y], changedPos: [i, j], room: room });
+                    socket.emit('changePieceLocation', { piece: piece, originalPos: [piece.x, piece.y], changedPos: [i, j], room: room });
                 }
                 else if(this.children[0] && ((this.children[0].id[0] == 'w')? true: false) == isPlayerWhite) {
                     if(!chance) return;
