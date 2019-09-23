@@ -1,4 +1,4 @@
-var socket = io();
+var socket = io('/chess');
 var room;
 
 function createRoom() {
@@ -27,6 +27,7 @@ socket.on('roomCreated', function (data) {
 
 socket.on('roomConnected', function (data) {
     if (!data.error) {
+        console.log(data);
         document.getElementById('roomInavlid').innerText = "";
         room = data.room;
         isPlayerWhite = data.isPlayerWhite

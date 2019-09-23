@@ -11,7 +11,8 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-io.on('connection', function (socket) {
+var nsp = io.of('/chess');
+nsp.on('connection', function (socket) {
     console.log('A user connected');
 
     socket.on('createRoom', function (data) {
@@ -26,14 +27,15 @@ io.on('connection', function (socket) {
     })
     
     socket.on('connectRoom', function (room) {
-        if(io.nsps['/'].adapter.rooms["room-"+room] && io.nsps['/'].adapter.rooms["room-"+room].length == 1) {
+        if(io.nsps['/chess'].adapter.rooms["room-"+room] && io.nsps['/chess'].adapter.rooms["room-"+room].length == 1) {
             socket.join("room-" + room);
             socket.emit('roomConnected',
             {
                 room,
                 isPlayerWhite: !(room % 2)
             });
-            io.to("room-"+room).emit("startGm", "strt");
+            console.log("Room "+room);
+            nsp.to("room-"+room).emit("startGm", "strt");
         } else {
             socket.emit('roomConnected', {error : 'Room does not exist!'})
         }
@@ -41,10 +43,10 @@ io.on('connection', function (socket) {
 
     // socket.on('message', function (roomNo) {
     //     io.to("room-" + roomNo).emit('receiveMsg', "You are in room no. " + roomNo);
-    // });
+    // });io.nsps
 
     socket.on('changePieceLocation', function(data) {
-        io.to("room-"+data.room).emit('pieceChanged', data);
+        nsp.to("room-"+data.room).emit('pieceChanged', data);
     });
 
     //Whenever someone disconnects this piece of code executed
